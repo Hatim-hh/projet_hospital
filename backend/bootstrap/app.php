@@ -12,9 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Désactiver CSRF pour toutes les routes API
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
+        ]);
+
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
+        
         $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {

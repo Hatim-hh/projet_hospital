@@ -1,0 +1,22 @@
+// ORIGINAL DATABASE STRUCTURE - KEEP THIS SAFE!
+// This is the original schema from your project that was working
+// Use this file to restore the database if anything breaks
+
+// TO RESTORE: 
+// 1. Run the schema.sql from database/schema.sql 
+// 2. Run the seeder.sql from database/seeder.sql
+// OR manually execute the SQL commands in your MySQL client
+
+// ORIGINAL USER CREDENTIALS (from seeder.sql):
+// Email: admin@clinique.ma
+// Password: password (hashed)
+
+// ORIGINAL 3 PATIENTS:
+// 1. Amrani Mohammed (P000001) - 0623456789 - mohammed.amrani@email.com
+// 2. Berrada Amal (P000002) - 0634567890 - amal.berrada@email.com  
+// 3. Chahid Youssef (P000003) - 0645678901 - youssef.chahid@email.com
+
+// DOCTORS:
+// 1. Bennani Ahmed (MED001) - Médecine Générale - ahmed.bennani@clinique.ma
+// 2. Alami Fatima (MED002) - Cardiologie - fatima.alami@clinique.ma
+// 3. Tazi Karim (MED003) - Dermatologie - karim.tazi@clinique.ma

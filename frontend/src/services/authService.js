@@ -10,8 +10,8 @@ export const authService = {
     return response.data;
   },
 
-  logout: async () => {
-    await api.post('/logout');
+  logout: () => {
+    // Suppression synchrone - pas besoin d'appeler l'API
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   },

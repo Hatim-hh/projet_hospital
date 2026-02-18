@@ -1,0 +1,17 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Medical Cross -->
+  <g stroke="#4A90E2" stroke-width="8" fill="none" stroke-linecap="round">
+    <line x1="150" y1="40" x2="150" y2="80"/>
+    <line x1="150" y1="100" x2="150" y2="140"/>
+    <line x1="170" y1="60" x2="130" y2="60"/>
+    <line x1="170" y1="120" x2="130" y2="120"/>
+  </g>
+  
+  <!-- Heart -->
+  <path d="M 100 160 C 60 130, 40 110, 40 85 C 40 65, 55 50, 70 50 C 80 50, 90 56, 100 68 C 110 56, 120 50, 130 50 C 145 50, 160 65, 160 85 C 160 110, 140 130, 100 160 Z" 
+        stroke="#E74C3C" stroke-width="4" fill="none"/>
+  
+  <!-- ECG Line -->
+  <polyline points="50,85 65,85 70,75 80,95 85,85 100,85 110,70 120,100 125,85 140,85" 
+            stroke="#4A90E2" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -22,4 +22,9 @@ class Medecin extends Model
     {
         return $this->hasMany(RendezVous::class, 'id_medecin', 'id_medecin');
     }
+
+    public function consultations()
+    {
+        return $this->hasMany(Consultation::class, 'id_medecin', 'id_medecin');
+    }
 }

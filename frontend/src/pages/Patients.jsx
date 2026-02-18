@@ -1,7 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../components/common/Navbar';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { patientService } from '../services/patientService';
+import { useDebounce } from '../hooks/useDebounce';
+import { MESSAGES } from '../constants';
 import {
   MagnifyingGlassIcon,
   PlusIcon,
@@ -20,49 +24,64 @@ const Patients = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { success, error } = useToast();
+
   const [formData, setFormData] = useState({
     nom: '', prenom: '', date_naissance: '', sexe: 'M',
     telephone: '', email: '', adresse: '', groupe_sanguin: '', situation_familiale: ''
   });
 
-  useEffect(() => {
-    loadPatients();
-  }, []);
-
-  const loadPatients = async () => {
+  const loadPatients = useCallback(async () => {
     try {
-      const response = await patientService.getAll({ search: searchTerm });
-      setPatients(response.data);
-    } catch (error) {
-      console.error('Erreur:', error);
+      setLoading(true);
+      const response = await patientService.getAll({ search: debouncedSearchTerm });
+      console.log('Patients response:', response.data);
+      setPatients(Array.isArray(response.data) ? response.data : []);
+    } catch (err) {
+      console.error('Erreur lors du chargement des patients:', err);
+      error(MESSAGES.LOAD_ERROR);
+      setPatients([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [debouncedSearchTerm, error]);
+
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      loadPatients();
+    }
+  }, [authLoading, isAuthenticated, loadPatients]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (selectedPatient) {
         await patientService.update(selectedPatient.id_patient, formData);
+        success(MESSAGES.UPDATED);
       } else {
         await patientService.create(formData);
+        success(MESSAGES.CREATED);
       }
       setShowModal(false);
       resetForm();
       loadPatients();
-    } catch (error) {
-      alert('Erreur lors de l\'enregistrement');
+    } catch (err) {
+      console.error('Erreur enregistrement:', err);
+      error(MESSAGES.UPDATE_ERROR);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce patient ?')) {
+    if (window.confirm(MESSAGES.CONFIRM_DELETE)) {
       try {
         await patientService.delete(id);
+        success(MESSAGES.DELETED);
         loadPatients();
-      } catch (error) {
-        alert('Erreur lors de la suppression');
+      } catch (err) {
+        console.error('Erreur suppression:', err);
+        error(MESSAGES.DELETE_ERROR);
       }
     }
   };
@@ -98,7 +117,7 @@ const Patients = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 dark:text-white">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

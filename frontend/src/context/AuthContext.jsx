@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { authService } from '../services/authService';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -19,9 +20,13 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const logout = async () => {
-    await authService.logout();
+  const logout = () => {
+    // Synchrone - pas besoin d'await
+    authService.logout();
     setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    // La redirection sera gérée par le composant qui appelle logout
   };
 
   return (
